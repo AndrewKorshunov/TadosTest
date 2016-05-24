@@ -8,30 +8,39 @@ namespace Server
 {    
     public class ClientService : IClientService
     {
+        private readonly DbConnector dbConnector;
+
+        public ClientService()
+        {
+            this.dbConnector = new DbConnector();
+        }
+
         public IEnumerable<ClientEntity> GetAllClients()
         {
-            return new[] { new ClientEntity() {
-                Id = 666, 
-                Name = "TestCode", 
-                CreationDate = DateTime.Now, 
-                Payment = 666 }};
+            return dbConnector.GetAllClients();
         }
 
         public bool AddClient(ClientEntity client)
         {
-            return true;
+            int affectedRows = dbConnector.AddClient(client);
+            if (affectedRows == 1) return true;
+            else return false;
         }
 
         public bool EditClient(int updateId, ClientEntity client)
         {
-            if (updateId == 0) return true;
-            return false;
+            // Should affect only 1 client
+            int affectedRows = dbConnector.EditClient(updateId, client);
+            if (affectedRows == 1) return true;
+            else return false;
         }
 
         public bool RemoveClient(int removeId)
         {
-            if (removeId == 0) return true;
-            return false;
+            // Should affect only 1 client
+            int affectedRows = dbConnector.RemoveClient(removeId);
+            if (affectedRows == 1) return true;
+            else return false;
         }
     }
 }

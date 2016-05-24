@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClientsLibrary;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 
 namespace Server
 {
@@ -12,17 +13,12 @@ namespace Server
     {
         static void Main()
         {
-            //var server = new ClientService();
             var host = new ServiceHost(typeof(ClientService));
+
+            // Show exceptions to client
+            //var d = host.Description.Behaviors.Find<ServiceDebugBehavior>();
+            //d.IncludeExceptionDetailInFaults = true;
             host.Open();
-
-            var cl = new ClientEntity() { Name = "CodeTEst", CreationDate = DateTime.Now, Payment = 123 };
-            //server.AddClient(cl);
-            //var t = server.GetAllClients();
-            //server.RemoveClient(222);
-            //server.EditClient(222, cl);
-
-
 
             Console.ReadKey();
             host.Close();
