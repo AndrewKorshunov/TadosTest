@@ -50,7 +50,7 @@ namespace ClientApp
         }
         public bool IsClientSelected
         {
-            get { return dataGridView.SelectedRows.Count != 0; }
+            get { return dataGridView.SelectedRows != null && dataGridView.SelectedRows.Count != 0; }
         }
 
         public void DisplayClient(params object[] clientParameters)
@@ -68,6 +68,11 @@ namespace ClientApp
             dataGridView.ColumnCount = fieldNames.Length;
             for (int i = 0; i < fieldNames.Length; i++)
                 dataGridView.Columns[i].Name = fieldNames[i];
+        }
+
+        public void ShowError(string text)
+        {
+            MessageBox.Show(text, "Ошибка");
         }
 
         // Should be in AddClientView
@@ -99,6 +104,6 @@ namespace ClientApp
         {
             get { return textBoxEditClientPayment.Text; }
             set { textBoxEditClientPayment.Text = value; }
-        }        
+        }
     }
 }

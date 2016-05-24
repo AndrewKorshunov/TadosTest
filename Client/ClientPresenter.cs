@@ -15,7 +15,7 @@ namespace ClientApp
         public MainPresenter(IClientView view, ClientProxy clientProxy)
         {
             this.view = view;
-            this.clientProxy = clientProxy;
+            this.clientProxy = clientProxy;            
             clients = new List<ClientEntity>();
 
             view.BuildViewWithFields("Name", "CreationDate", "Payment");
@@ -26,38 +26,57 @@ namespace ClientApp
         {
             clients = new List<ClientEntity>(clientProxy.GetAllClients());
             view.ClearView();
-            foreach (var client in clients)
-            {
-                view.DisplayClient(client.Name, client.CreationDate, client.Payment);
-            }
+            DisplayClients();
         }
         
         // All this logic should be on different form (view)
         public void AddClient()
-        {            
-            var client = new ClientEntity()
+        {
+            var client = new ClientEntity();
+
+            // Filter type conversion exceptions from textBox
+            try
             {
-                Name = view.AddClientName,
-                CreationDate = Convert.ToDateTime(view.AddClientCreationDate),
-                Payment = Convert.ToDecimal(view.AddClientPayment)
-            };
+                client.Name = view.AddClientName;
+                client.CreationDate = Convert.ToDateTime(view.AddClientCreationDate);
+                client.Payment = Convert.ToDecimal(view.AddClientPayment);
+            }
+            catch (Exception e)
+            {
+                view.ShowError(e.Message);
+                return;
+            }
 
             clientProxy.AddClient(client);
             clients.Add(client);
+
+            DisplayClients();
         }
         
         // All this logic should be on different form (view)
         public void EditClient()
         {
             int id = clients[view.SelectedClientIndex].Id;
-            var client = new ClientEntity()
-            {
-                Name = view.EditClientName,
-                CreationDate = Convert.ToDateTime(view.EditClientCreationDate),
-                Payment = Convert.ToDecimal(view.EditClientPayment)
-            };
+            var newClient = new ClientEntity();
 
-            clientProxy.EditClient(id, client);
+            // Filter type conversion exceptions from textBox
+            try
+            {
+                newClient.Name = view.EditClientName;
+                newClient.CreationDate = Convert.ToDateTime(view.EditClientCreationDate);
+                newClient.Payment = Convert.ToDecimal(view.EditClientPayment);
+            }
+            catch (Exception e)
+            {
+                view.ShowError(e.Message);
+                return;
+            }
+            clientProxy.EditClient(id, newClient);
+            clients[view.SelectedClientIndex].Name = newClient.Name;
+            clients[view.SelectedClientIndex].CreationDate = newClient.CreationDate;
+            clients[view.SelectedClientIndex].Payment = newClient.Payment;
+
+            DisplayClients();
         }
 
         public void RemoveClient()
@@ -67,6 +86,7 @@ namespace ClientApp
                 int realId = clients[view.SelectedClientIndex].Id;
                 clientProxy.RemoveClient(realId);
                 clients.RemoveAt(view.SelectedClientIndex);
+                DisplayClients();
             }
         }
 
@@ -80,6 +100,13 @@ namespace ClientApp
                 view.EditClientCreationDate = selectedClient.CreationDate.ToString();
                 view.EditClientPayment = selectedClient.Payment.ToString();
             }
+        }
+
+        private void DisplayClients()
+        {
+            view.ClearView();
+            foreach(var client in clients)
+                view.DisplayClient(client.Name, client.CreationDate, client.Payment);
         }
 
         public void Start()

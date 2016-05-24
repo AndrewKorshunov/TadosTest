@@ -22,6 +22,7 @@ namespace ClientApp
         void BuildViewWithFields(params string[] fieldNames);
         void ClearView();
         void ShowView();
+        void ShowError(string text);
 
         // This should be in AddClientView 
         string AddClientName { get; }
