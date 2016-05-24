@@ -9,6 +9,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientsLibrary", "ClientsLibrary\ClientsLibrary.csproj", "{3B06CEFB-3A44-4851-BEA4-9EFEBB263452}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pictures", "Pictures", "{CA47EBB2-1405-4352-9ADD-09FA95410314}"
+	ProjectSection(SolutionItems) = preProject
+		Pictures\CurrentRequest.png = Pictures\CurrentRequest.png
+		Pictures\CurrentStructure.png = Pictures\CurrentStructure.png
+		Pictures\IdealRequest.png = Pictures\IdealRequest.png
+		Pictures\IdealStructure.png = Pictures\IdealStructure.png
+		Pictures\MainForm.png = Pictures\MainForm.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C3682311-A605-44D4-B6D6-65548954BD2D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
