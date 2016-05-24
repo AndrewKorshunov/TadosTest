@@ -8,7 +8,7 @@ using ClientsLibrary;
 
 namespace Server
 {
-    class DbConnector : IDisposable, IClientService
+    class DbConnector : IDisposable
     {
         private SqlConnection connection;
 
@@ -36,86 +36,51 @@ namespace Server
                     Payment = dataReader.GetDecimal(3)
                 });
             }
+            dataReader.Close();
             return clients;
         }
         
-        public bool AddClient(ClientEntity client)
+        public int AddClient(ClientEntity client)
         {
             string insertCommand = string.Format(
                 "Insert into Clients(Name,CreationDate,Payment) values ('{0}', '{1}', {2})", 
                 client.Name, 
                 client.CreationDate.ToString("yyyy-MM-dd HH:mm:ss"), 
-                client.Payment 
+                client.Payment.ToString().Replace(',','.')
                 );
-            var sqlCommand = new SqlCommand(insertCommand, connection);            
-            var TTT = sqlCommand.ExecuteNonQuery();
-            return true;
+            var sqlCommand = new SqlCommand(insertCommand, connection);
+            var affectedRows = sqlCommand.ExecuteNonQuery();
+
+            return affectedRows;
         }
 
-        public bool EditClient(int updateId, ClientEntity client)
+        public int EditClient(int updateId, ClientEntity client)
         {
             string updateString = string.Format(
-                "Update Clients set Name = '{1}', CreationDate = '{2}', Payment = {3} where Id = {4}",
-                client.Id,
+                "Update Clients set Name = '{0}', CreationDate = '{1}', Payment = {2} where Id = {3}",
                 client.Name,
                 client.CreationDate.ToString(),
-                client.Payment,
+                client.Payment.ToString().Replace(',','.'),
                 updateId
                 );
             var sqlCommand = new SqlCommand(updateString, connection);
-            var TTT = sqlCommand.ExecuteNonQuery();
-            return true;
+            var affectedRows = sqlCommand.ExecuteNonQuery();
+
+            return affectedRows;
         }
 
-        public bool RemoveClient(int id)
+        public int RemoveClient(int id)
         {
             string deleteQuerry = "Delete from Clients where Id=" + id;
             var sqlCommand = new SqlCommand(deleteQuerry, connection);
-            var TTT = sqlCommand.ExecuteNonQuery();
-            return true;
+            var affectedRows = sqlCommand.ExecuteNonQuery();
+                        
+            return affectedRows;
         }
 
         public void Dispose()
         {
             connection.Close();
         }
-
-        /* 
-        public DataSet SelectUserDetails()
-        {
-            SqlConnection con = new SqlConnection("Data Source=.;Initial Catalog=registration;User ID=sa;Password=wintellect");
-            con.Open();
-            SqlCommand cmd = new SqlCommand("Select * from RegistrationTable", con);
-            SqlDataAdapter sda = new SqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            sda.Fill(ds);
-            cmd.ExecuteNonQuery();
-            con.Close();
-            return ds;
-        }
- 
-        public string InsertUserDetails(UserDetails userInfo)
-        {
-            string Message;
-            SqlConnection con = new SqlConnection("Data Source=.;Initial Catalog=registration;User ID=sa;Password=wintellect");
-            con.Open();
-            SqlCommand cmd = new SqlCommand("insert into RegistrationTable(UserName,Password,Country,Email) values(@UserName,@Password,@Country,@Email)", con);
-            cmd.Parameters.AddWithValue("@UserName", userInfo.UserName);
-            cmd.Parameters.AddWithValue("@Password", userInfo.Password);
-            cmd.Parameters.AddWithValue("@Country", userInfo.Country);
-            cmd.Parameters.AddWithValue("@Email", userInfo.Email);
-            int result = cmd.ExecuteNonQuery();
-            if (result == 1)
-            {
-                Message = userInfo.UserName + " Details inserted successfully";
-            }
-            else
-            {
-                Message = userInfo.UserName + " Details not inserted successfully";
-            }
-            con.Close();
-            return Message;
-        }
-         */
     }
 }
