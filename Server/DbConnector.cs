@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
 using ClientsLibrary;
 
@@ -19,6 +16,35 @@ namespace Server
                                         Integrated Security=True";
             connection = new SqlConnection(connectionString);            
             connection.Open();
+        }
+
+        public int AddClient(ClientEntity client)
+        {
+            string insertCommand = string.Format(
+                "Insert into Clients(Name,CreationDate,Payment) values ('{0}', '{1}', {2})",
+                client.Name,
+                client.CreationDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                client.Payment.ToString().Replace(',', '.')
+                );
+            var sqlCommand = new SqlCommand(insertCommand, connection);
+            var affectedRows = sqlCommand.ExecuteNonQuery();
+
+            return affectedRows;
+        }
+
+        public int EditClient(int updateId, ClientEntity client)
+        {
+            string updateString = string.Format(
+                "Update Clients set Name = '{0}', CreationDate = '{1}', Payment = {2} where Id = {3}",
+                client.Name,
+                client.CreationDate.ToString(),
+                client.Payment.ToString().Replace(',', '.'),
+                updateId
+                );
+            var sqlCommand = new SqlCommand(updateString, connection);
+            var affectedRows = sqlCommand.ExecuteNonQuery();
+
+            return affectedRows;
         }
 
         public IEnumerable<ClientEntity> GetAllClients()
@@ -40,35 +66,6 @@ namespace Server
             return clients;
         }
         
-        public int AddClient(ClientEntity client)
-        {
-            string insertCommand = string.Format(
-                "Insert into Clients(Name,CreationDate,Payment) values ('{0}', '{1}', {2})", 
-                client.Name, 
-                client.CreationDate.ToString("yyyy-MM-dd HH:mm:ss"), 
-                client.Payment.ToString().Replace(',','.')
-                );
-            var sqlCommand = new SqlCommand(insertCommand, connection);
-            var affectedRows = sqlCommand.ExecuteNonQuery();
-
-            return affectedRows;
-        }
-
-        public int EditClient(int updateId, ClientEntity client)
-        {
-            string updateString = string.Format(
-                "Update Clients set Name = '{0}', CreationDate = '{1}', Payment = {2} where Id = {3}",
-                client.Name,
-                client.CreationDate.ToString(),
-                client.Payment.ToString().Replace(',','.'),
-                updateId
-                );
-            var sqlCommand = new SqlCommand(updateString, connection);
-            var affectedRows = sqlCommand.ExecuteNonQuery();
-
-            return affectedRows;
-        }
-
         public int RemoveClient(int id)
         {
             string deleteQuerry = "Delete from Clients where Id=" + id;

@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Windows.Forms;
-using ClientsLibrary;
 using System.Collections.Generic;
+using ClientsLibrary;
 
 namespace ClientApp
 {
     public class MainPresenter
     {
-        private readonly IClientView view;
         private readonly ClientProxy clientProxy;
+        private readonly IClientView view;        
 
         private List<ClientEntity> clients;
 
@@ -22,13 +21,6 @@ namespace ClientApp
             HookUpViewEvents();
         }
 
-        public void GetAllClients()
-        {
-            clients = new List<ClientEntity>(clientProxy.GetAllClients());
-            view.ClearView();
-            DisplayClients();
-        }
-        
         // All this logic should be on different form (view)
         public void AddClient()
         {
@@ -52,7 +44,7 @@ namespace ClientApp
 
             DisplayClients();
         }
-        
+
         // All this logic should be on different form (view)
         public void EditClient()
         {
@@ -79,17 +71,6 @@ namespace ClientApp
             DisplayClients();
         }
 
-        public void RemoveClient()
-        {
-            if (view.IsClientSelected)
-            {
-                int realId = clients[view.SelectedClientIndex].Id;
-                clientProxy.RemoveClient(realId);
-                clients.RemoveAt(view.SelectedClientIndex);
-                DisplayClients();
-            }
-        }
-
         // This should be in ClientEditView
         public void FillClientEditFields()
         {
@@ -102,17 +83,35 @@ namespace ClientApp
             }
         }
 
-        private void DisplayClients()
+        public void GetAllClients()
         {
+            clients = new List<ClientEntity>(clientProxy.GetAllClients());
             view.ClearView();
-            foreach(var client in clients)
-                view.DisplayClient(client.Name, client.CreationDate, client.Payment);
+            DisplayClients();
+        }       
+        
+        public void RemoveClient()
+        {
+            if (view.IsClientSelected)
+            {
+                int realId = clients[view.SelectedClientIndex].Id;
+                clientProxy.RemoveClient(realId);
+                clients.RemoveAt(view.SelectedClientIndex);
+                DisplayClients();
+            }
         }
 
         public void Start()
         {
             clientProxy.Open();
             view.ShowView();
+        }
+
+        private void DisplayClients()
+        {
+            view.ClearView();
+            foreach (var client in clients)
+                view.DisplayClient(client.Name, client.CreationDate, client.Payment);
         }
 
         private void Close()

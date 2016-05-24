@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using ClientsLibrary;
-using System.Collections.Generic;
 
 namespace Server
 {    
@@ -13,11 +13,6 @@ namespace Server
         public ClientService()
         {
             this.dbConnector = new DbConnector();
-        }
-
-        public IEnumerable<ClientEntity> GetAllClients()
-        {
-            return dbConnector.GetAllClients();
         }
 
         public bool AddClient(ClientEntity client)
@@ -33,6 +28,11 @@ namespace Server
             int affectedRows = dbConnector.EditClient(updateId, client);
             if (affectedRows == 1) return true;
             else return false;
+        }
+
+        public IEnumerable<ClientEntity> GetAllClients()
+        {
+            return dbConnector.GetAllClients();
         }
 
         public bool RemoveClient(int removeId)

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.ServiceModel;
-using ClientsLibrary;
 using System.Collections.Generic;
+using ClientsLibrary;
+
 
 namespace ClientApp
 {
     public class ClientProxy: ClientBase<IClientService>, IClientService
     {
-        public IEnumerable<ClientEntity> GetAllClients()
-        {
-            return Channel.GetAllClients();
-        }
-
         public bool AddClient(ClientEntity client)
         {
             return Channel.AddClient(client);
@@ -20,6 +16,11 @@ namespace ClientApp
         public bool EditClient(int updateId, ClientEntity client)
         {
             return Channel.EditClient(updateId, client);
+        }
+
+        public IEnumerable<ClientEntity> GetAllClients()
+        {
+            return Channel.GetAllClients();
         }
 
         public bool RemoveClient(int id)
