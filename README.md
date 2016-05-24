@@ -2,8 +2,7 @@
 
 Simple CRUD application using WCF service and WinForms client.
 
-Описание
-========
+#### Описание
 Приложение состоит из трёх проектов: сервер, клиент и описание WCF сервиса.
 Сервер - self-hosted WCF service, SQL DataBase + SQL Command
 Сервер выступает в качестве брокера: 
@@ -12,31 +11,28 @@ Simple CRUD application using WCF service and WinForms client.
 
 Клиент - WinForms, MVP.
 
-![image](MainForm.png)
+![image](/Pictures/MainForm.png)
 
-Задуманная идея
-===============
+#### Задуманная идея
 
-![image](IdealStructure.png)
+![image](/Pictures/IdealStructure.png)
 
 Запрос в начальной идее
 
-![image](IdealRequest.png)
+![image](/Pictures/IdealRequest.png)
 
 
-Текущее решение
-===============
+#### Текущее решение
 
-![image](CurrentStructure.png)
+![image](/Pictures/CurrentStructure.png)
 
 Путь запроса
 
-![image](CurrentRequest.png)
+![image](/Pictures/CurrentRequest.png)
 
-Недостатки текущего решения
-===========================
+#### Недостатки текущего решения
 
-- Нет пересылки оишбок от сервера клиенту. Нет обработки ошибок. 
+- Нет пересылки ошибок от сервера клиенту. Нет обработки ошибок. 
 - Весь функционал на одной форме (View).
 - Избыточный функционал обработки сервиса не сервере. Сервер значет, что источник данных - БД, коннектор к БД знает о выдаваемом типе.
 - Сильная связанность Presenter и ClientProxy.
