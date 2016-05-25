@@ -9,15 +9,13 @@ namespace Server
     {
         static void Main()
         {
-            var host = new ServiceHost(typeof(ClientService));
+            string connectionString = @"Data Source=(LocalDB)\v11.0;
+                                        AttachDbFilename=C:\Users\Andrew\Desktop\SChool_mag\_AfterParty\TadosTest\Server\DB\ClientsDB.mdf;
+                                        Integrated Security=True";
+            var dataProvider = new DbConnector(connectionString);
 
-            // Show exceptions to client
-            //var d = host.Description.Behaviors.Find<ServiceDebugBehavior>();
-            //d.IncludeExceptionDetailInFaults = true;
-            host.Open();
-
+            new Server(dataProvider).Start();
             Console.ReadKey();
-            host.Close();
         }
     }
 }
