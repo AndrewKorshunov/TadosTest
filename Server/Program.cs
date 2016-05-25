@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ServiceModel;
-using System.ServiceModel.Description;
-using ClientsLibrary;
 
 namespace Server
 {
