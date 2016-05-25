@@ -9,14 +9,14 @@ namespace Server
     {
         static void Main()
         {
-            string connectionString = @"Data Source=(LocalDB)\v11.0;
-                                        AttachDbFilename=C:\Users\Andrew\Desktop\SChool_mag\_AfterParty\TadosTest\Server\DB\ClientsDB.mdf;
-                                        Integrated Security=True";
-            var dataProvider = new DbConnector(connectionString);
+            // Set absolute path to DB
+            AppDomain.CurrentDomain.SetData("DataDirectory", @"C:\Users\Andrew\Desktop\SChool_mag\_AfterParty\TadosTest\Server\DB\");            
 
-            new Server(dataProvider).Start();
+            var host = new ServiceHost(typeof(ClientService));
+            host.Open();
 
             Console.ReadKey();
+            host.Close();
         }
     }
 }
