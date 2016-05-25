@@ -15,6 +15,7 @@ namespace Server
             var dataProvider = new DbConnector(connectionString);
 
             new Server(dataProvider).Start();
+
             Console.ReadKey();
         }
     }
