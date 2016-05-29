@@ -4,26 +4,35 @@ using ClientsLibrary;
 
 namespace ClientApp
 {
-    public class MainPresenter
+    class MainPresenter
     {
         private readonly ClientProxy clientProxy;
-        private readonly IClientView view;        
+        private readonly IMainClientView view;
+
+        private readonly EditClientPresenter editClientPresenter;
+        private readonly AddClientPresenter addClientPresenter;
 
         private List<ClientEntity> clients;
 
-        public MainPresenter(IClientView view, ClientProxy clientProxy)
+        public MainPresenter(IMainClientView view, ClientProxy clientProxy)
         {
+            // Move it somewhere?
+            addClientPresenter = new AddClientPresenter(new AddClientForm(), clientProxy);
+            editClientPresenter = new EditClientPresenter(new EditClientForm(), clientProxy);
+
             this.view = view;
             this.clientProxy = clientProxy;            
             clients = new List<ClientEntity>();
-
             view.BuildViewWithFields("Name", "CreationDate", "Payment");
             HookUpViewEvents();
         }
 
-        // All this logic should be on different form (view)
         public void AddClient()
         {
+            //Show ClientAddForm
+            addClientPresenter.Start();
+
+            /*
             var client = new ClientEntity();
 
             // Filter type conversion exceptions from textBox
@@ -43,11 +52,16 @@ namespace ClientApp
             clients.Add(client);
 
             DisplayClients();
+            */
         }
 
-        // All this logic should be on different form (view)
         public void EditClient()
         {
+            // Show ClientEditForm
+            if(view.IsClientSelected)
+                editClientPresenter.Start(clients[view.SelectedClientIndex]);
+
+            /*
             int id = clients[view.SelectedClientIndex].Id;
             var newClient = new ClientEntity();
 
@@ -69,20 +83,9 @@ namespace ClientApp
             clients[view.SelectedClientIndex].Payment = newClient.Payment;
 
             DisplayClients();
+            */
         }
-
-        // This should be in ClientEditView
-        public void FillClientEditFields()
-        {
-            if (view.IsClientSelected)
-            {
-                var selectedClient = clients[view.SelectedClientIndex];
-                view.EditClientName = selectedClient.Name;
-                view.EditClientCreationDate = selectedClient.CreationDate.ToString();
-                view.EditClientPayment = selectedClient.Payment.ToString();
-            }
-        }
-
+        
         public void GetAllClients()
         {
             clients = new List<ClientEntity>(clientProxy.GetAllClients());
@@ -123,10 +126,9 @@ namespace ClientApp
         {
             view.AllClientsRequsted += GetAllClients;
             view.ClientCreating += AddClient;
-            view.ClientEdited += EditClient;
+            view.ClientEditing += EditClient;
             view.ClientRemoving += RemoveClient;
-            view.ViewClosing += Close;
-            view.ClientEditing += FillClientEditFields;
+            view.MainViewClosing += Close;            
         }
     }
 }

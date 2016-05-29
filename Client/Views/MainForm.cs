@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace ClientApp
 {
-    public partial class MainForm : Form, IClientView
+    public partial class MainForm : Form, IMainClientView
     {
         public MainForm()
         {
@@ -13,55 +13,22 @@ namespace ClientApp
             buttonCreateClient.Click += (sender,args) => InvokeEvent(ClientCreating);
             buttonGetClients.Click += (sender, args) => InvokeEvent(AllClientsRequsted);
             buttonDeleteClient.Click += (sender, args) => InvokeEvent(ClientRemoving);
-            buttonEditClient.Click += (sender, args) => InvokeEvent(ClientEdited);
+            buttonEditClient.Click += (sender, args) => InvokeEvent(ClientEditing);
 
-            dataGridView.SelectionChanged += (sender, args) => InvokeEvent(ClientEditing);
-
-            this.FormClosing += (sender, args) => InvokeEvent(ViewClosing);
+            this.FormClosing += (sender, args) => InvokeEvent(MainViewClosing);
         }
 
         public event Action AllClientsRequsted;
         public event Action ClientCreating;
         public event Action ClientEditing;
-        public event Action ClientEdited;
         public event Action ClientRemoving;
-        public event Action ViewClosing;
-
-        // Should be in AddClientView
-        public string AddClientName
-        {
-            get { return textBoxAddClientName.Text; }
-        }
-        public string AddClientCreationDate
-        {
-            get { return textBoxAddClientCreationDate.Text; }
-        }
-        public string AddClientPayment
-        {
-            get { return textBoxAddClientPayment.Text; }
-        }
-
-        // Should be in EditClientView
-        public string EditClientName
-        {
-            get { return textBoxEditClientName.Text; }
-            set { textBoxEditClientName.Text = value; }
-        }
-        public string EditClientCreationDate
-        {
-            get { return textBoxEditClientCreationDate.Text; }
-            set { textBoxEditClientCreationDate.Text = value; }
-        }
-        public string EditClientPayment
-        {
-            get { return textBoxEditClientPayment.Text; }
-            set { textBoxEditClientPayment.Text = value; }
-        }
-
+        public event Action MainViewClosing;
+        
         public bool IsClientSelected
         {
             get { return dataGridView.SelectedRows != null && dataGridView.SelectedRows.Count != 0; }
         }
+        // BUG selectedindex changes with datagridview sorting
         public int SelectedClientIndex
         {
             get { return dataGridView.SelectedRows[0].Index; }
@@ -71,7 +38,10 @@ namespace ClientApp
         {
             dataGridView.ColumnCount = fieldNames.Length;
             for (int i = 0; i < fieldNames.Length; i++)
+            {
                 dataGridView.Columns[i].Name = fieldNames[i];
+                dataGridView.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
         }
 
         public void ClearView()
