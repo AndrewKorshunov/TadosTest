@@ -9,12 +9,12 @@ namespace ClientApp
 {
     class AddClientPresenter
     {
-        private readonly ClientProxy clientProxy;
+        private readonly ClientRepository clientRepository;
         private readonly IAddClientView view;
 
-        public AddClientPresenter(IAddClientView view, ClientProxy proxy)
+        public AddClientPresenter(IAddClientView view, ClientRepository clientRepo)
         {
-            this.clientProxy = proxy;
+            this.clientRepository = clientRepo;
             this.view = view;
 
             view.ClientCreated += CreateClient;
@@ -35,7 +35,7 @@ namespace ClientApp
                 return;
             }
 
-            clientProxy.AddClient(newClient);
+            clientRepository.AddClient(newClient);
             view.CloseView();
         }
 

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientRepository.cs" />
+    <Compile Include="IClientRepository.cs" />
     <Compile Include="Presenters\AddClientPresenter.cs" />
     <Compile Include="Presenters\EditClientPresenter.cs" />
     <Compile Include="Presenters\MainClientPresenter.cs" />

@@ -6,14 +6,14 @@ namespace ClientApp
 {
     class EditClientPresenter
     {
-        private readonly IEditClientView view;        
-        private readonly ClientProxy clientProxy;
+        private readonly IEditClientView view;
+        private readonly ClientRepository clientRepository;
         private int clientId;
 
-        public EditClientPresenter(IEditClientView view, ClientProxy proxy)
+        public EditClientPresenter(IEditClientView view, ClientRepository clientRepo)
         {
             this.view = view;
-            this.clientProxy = proxy;
+            this.clientRepository = clientRepo;
 
             view.ClientEdited += SaveEditedClient;
         }
@@ -33,7 +33,7 @@ namespace ClientApp
                 return;
             }
 
-            clientProxy.EditClient(clientId, newClient);
+            clientRepository.EditClient(clientId, newClient);
             view.CloseView();
         }
 

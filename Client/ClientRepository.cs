@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ClientApp
 {
-    class ClientRepository : IDisposable
+    class ClientRepository : IDisposable, ClientApp.IClientRepository
     {
         // Add some error handling by
         // catch(FaultException) Abort();
@@ -29,6 +29,35 @@ namespace ClientApp
         // Только репозиторий знает реальный ИД, все остальные знают
         // только ИД в списке репозитория.
 
+        /* Клиента можно сделать так чтобы добавить в репозиторий
+        public class UserNPC:INotifyPropertyChanged
+        {
+            private string name;
+            public string Name { 
+                get { return name; } 
+                set { name = value; onPropertyChanged(this, "Name"); } 
+            }
+            public int grade;
+            public int Grade { 
+                get { return grade; } 
+                set { grade = value; onPropertyChanged(this, "Grade"); } 
+            }
+        
+            // Declare the PropertyChanged event
+            public event PropertyChangedEventHandler PropertyChanged;
+        
+            // OnPropertyChanged will raise the PropertyChanged event passing the
+            // source property that is being updated.
+            private void onPropertyChanged(object sender, string propertyName)
+            {
+                if (this.PropertyChanged != null)
+                {
+                    PropertyChanged(sender, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+         }
+         */
+
         private void TEST()
         {
             var t = new System.Collections.ObjectModel.ObservableCollection<ClientEntity>();
@@ -47,6 +76,12 @@ namespace ClientApp
 
         public event Action ListChanged;
 
+        public ClientEntity this[int index]
+        {
+            get { return clients[index]; }
+            //set { clients[index] = value; }
+        }
+
         public bool AddClient(ClientEntity client)
         {
             var result = clientProxy.AddClient(client);
@@ -59,12 +94,6 @@ namespace ClientApp
 
         public bool EditClient(int updateId, ClientEntity client)
         {
-            /*
-            int id = clients[view.SelectedClientIndex].Id;
-            var newClient = new ClientEntity();
-
-            clientProxy.EditClient(id, newClient);
-            */
             int realId = clients[updateId].Id;
             var callResult = clientProxy.EditClient(realId, client);
             clients[updateId] = client;
@@ -73,18 +102,24 @@ namespace ClientApp
             return callResult;
         }
 
+        public IReadOnlyCollection<ClientEntity> AllClients()
+        {
+            return clients as IReadOnlyCollection<ClientEntity>;
+        }
+
         public IReadOnlyCollection<ClientEntity> GetAllClients()
         {
-            var clients = clientProxy.GetAllClients();
-            clientProxy.GetAllClients();
+            var callResult = clientProxy.GetAllClients();
+            clients = new List<ClientEntity>(callResult);
 
             return clients as IReadOnlyCollection<ClientEntity>;
         }
 
-        public bool RemoveClient(int id)
+        public bool RemoveClient(int idInRepository)
         {
-            var callResult = clientProxy.RemoveClient(id);
-            clients.RemoveAt(id);
+            int realId = clients[idInRepository].Id;
+            var callResult = clientProxy.RemoveClient(realId);
+            clients.RemoveAt(idInRepository);
             InvokeEvent(ListChanged);
             
             return callResult;

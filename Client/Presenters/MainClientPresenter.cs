@@ -6,121 +6,62 @@ namespace ClientApp
 {
     class MainPresenter
     {
-        private readonly ClientProxy clientProxy;
+        private readonly ClientRepository clientRepository;
         private readonly IMainClientView view;
 
         private readonly EditClientPresenter editClientPresenter;
         private readonly AddClientPresenter addClientPresenter;
 
-        private List<ClientEntity> clients;
 
-        public MainPresenter(IMainClientView view, ClientProxy clientProxy)
+        public MainPresenter(IMainClientView view, ClientRepository clientRepo)
         {
             // Move it somewhere?
-            addClientPresenter = new AddClientPresenter(new AddClientForm(), clientProxy);
-            editClientPresenter = new EditClientPresenter(new EditClientForm(), clientProxy);
+            addClientPresenter = new AddClientPresenter(new AddClientForm(), clientRepo);
+            editClientPresenter = new EditClientPresenter(new EditClientForm(), clientRepo);
 
             this.view = view;
-            this.clientProxy = clientProxy;            
-            clients = new List<ClientEntity>();
+            this.clientRepository = clientRepo;
+
             view.BuildViewWithFields("Name", "CreationDate", "Payment");
             HookUpViewEvents();
         }
 
         public void AddClient()
         {
-            //Show ClientAddForm
             addClientPresenter.Start();
-
-            /*
-            var client = new ClientEntity();
-
-            // Filter type conversion exceptions from textBox
-            try
-            {
-                client.Name = view.AddClientName;
-                client.CreationDate = Convert.ToDateTime(view.AddClientCreationDate);
-                client.Payment = Convert.ToDecimal(view.AddClientPayment);
-            }
-            catch (Exception e)
-            {
-                view.ShowError(e.Message);
-                return;
-            }
-
-            clientProxy.AddClient(client);
-            clients.Add(client);
-
-            DisplayClients();
-            */
         }
 
         public void EditClient()
         {
-            // Show ClientEditForm
             if(view.IsClientSelected)
-                editClientPresenter.Start(clients[view.SelectedClientIndex]);
-
-            /*
-            int id = clients[view.SelectedClientIndex].Id;
-            var newClient = new ClientEntity();
-
-            // Filter type conversion exceptions from textBox
-            try
-            {
-                newClient.Name = view.EditClientName;
-                newClient.CreationDate = Convert.ToDateTime(view.EditClientCreationDate);
-                newClient.Payment = Convert.ToDecimal(view.EditClientPayment);
-            }
-            catch (Exception e)
-            {
-                view.ShowError(e.Message);
-                return;
-            }
-            clientProxy.EditClient(id, newClient);
-            clients[view.SelectedClientIndex].Name = newClient.Name;
-            clients[view.SelectedClientIndex].CreationDate = newClient.CreationDate;
-            clients[view.SelectedClientIndex].Payment = newClient.Payment;
-
-            DisplayClients();
-            */
+                editClientPresenter.Start(clientRepository[view.SelectedClientIndex]);
         }
         
         public void GetAllClients()
         {
-            clients = new List<ClientEntity>(clientProxy.GetAllClients());
-            view.ClearView();
-            DisplayClients();
+            DisplayClients(clientRepository.GetAllClients());
         }       
         
         public void RemoveClient()
         {
             if (view.IsClientSelected)
             {
-                int realId = clients[view.SelectedClientIndex].Id;
-                clientProxy.RemoveClient(realId);
-                clients.RemoveAt(view.SelectedClientIndex);
-                DisplayClients();
+                clientRepository.RemoveClient(view.SelectedClientIndex);
+                DisplayClients(clientRepository.AllClients());
             }
         }
 
         public void Start()
         {
-            clientProxy.Open();
             view.ShowView();
         }
 
-        private void DisplayClients()
+        private void DisplayClients(IEnumerable<ClientEntity> clients)
         {
             view.ClearView();
             foreach (var client in clients)
                 view.DisplayClient(client.Name, client.CreationDate, client.Payment);
         }
-
-        private void Close()
-        {
-            clientProxy.Close();
-        }       
 
         private void HookUpViewEvents()
         {
@@ -128,7 +69,6 @@ namespace ClientApp
             view.ClientCreating += AddClient;
             view.ClientEditing += EditClient;
             view.ClientRemoving += RemoveClient;
-            view.MainViewClosing += Close;            
         }
     }
 }
