@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace ClientApp
 {
-    public partial class EditClientForm : Form, IEditClientView
+    partial class EditClientForm : Form, IEditClientView
     {
         public EditClientForm()
         {
@@ -12,16 +12,16 @@ namespace ClientApp
             buttonEditClient.Click += (sender, args) => InvokeEvent(ClientEdited);
         }
 
-        public string ClientName
-        {
-            get { return textBoxEditClientName.Text; }
-            private set { textBoxEditClientName.Text = value; }
-        }
         public string ClientCreationDate
         {
             get { return textBoxEditClientCreationDate.Text; }
             private set { textBoxEditClientCreationDate.Text = value; }
         }
+        public string ClientName
+        {
+            get { return textBoxEditClientName.Text; }
+            private set { textBoxEditClientName.Text = value; }
+        }        
         public string ClientPayment
         {
             get { return textBoxEditClientPayment.Text; }

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace ClientApp
 {
-    public partial class AddClientForm : Form, IAddClientView
+    partial class AddClientForm : Form, IAddClientView
     {
         public AddClientForm()
         {
@@ -12,14 +12,14 @@ namespace ClientApp
             buttonCreateClient.Click += (sender, args) => InvokeEvent(ClientCreated);
         }
 
-        public string ClientName
-        {
-            get { return textBoxAddClientName.Text; }
-        }
         public string ClientCreationDate
         {
             get { return textBoxAddClientCreationDate.Text; }
         }
+        public string ClientName
+        {
+            get { return textBoxAddClientName.Text; }
+        }        
         public string ClientPayment
         {
             get { return textBoxAddClientPayment.Text; }

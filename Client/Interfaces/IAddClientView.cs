@@ -6,8 +6,8 @@ namespace ClientApp
     {
         event Action ClientCreated;
 
-        string ClientName { get; }
         string ClientCreationDate { get; }
+        string ClientName { get; }        
         string ClientPayment { get; }
 
         void CloseView();

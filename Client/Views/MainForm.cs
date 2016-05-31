@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace ClientApp
 {
-    public partial class MainForm : Form, IMainClientView
+    partial class MainForm : Form, IMainClientView
     {
         public MainForm()
         {
@@ -28,7 +27,6 @@ namespace ClientApp
         {
             get { return dataGridView.SelectedRows != null && dataGridView.SelectedRows.Count != 0; }
         }
-        // BUG selectedindex changes with datagridview sorting
         public int SelectedClientIndex
         {
             get { return dataGridView.SelectedRows[0].Index; }
