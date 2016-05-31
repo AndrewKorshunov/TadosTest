@@ -10,7 +10,7 @@ namespace ClientApp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var view = new MainForm();            
+            var view = new MainForm();
             var proxy = new ClientProxy();
             var repo = new ClientRepository(proxy);
             var presenter = new MainPresenter(view, repo);

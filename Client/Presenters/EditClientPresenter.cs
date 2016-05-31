@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using ClientsLibrary;
 
 namespace ClientApp
@@ -7,10 +6,10 @@ namespace ClientApp
     class EditClientPresenter
     {
         private readonly IEditClientView view;
-        private readonly ClientRepository clientRepository;
-        private int clientId;
+        private readonly IClientRepository clientRepository;
+        private int clientToEditId;
 
-        public EditClientPresenter(IEditClientView view, ClientRepository clientRepo)
+        public EditClientPresenter(IEditClientView view, IClientRepository clientRepo)
         {
             this.view = view;
             this.clientRepository = clientRepo;
@@ -19,7 +18,7 @@ namespace ClientApp
         }
 
         void SaveEditedClient()
-        {
+        {            
             var newClient = new ClientEntity();
             try // Filter type conversion exceptions from text in textBox
             {
@@ -32,14 +31,14 @@ namespace ClientApp
                 view.ShowError(e.Message);
                 return;
             }
-
-            clientRepository.EditClient(clientId, newClient);
+            clientRepository.ReplaceAt(clientToEditId, newClient);
             view.CloseView();
         }
 
-        public void Start(ClientEntity client)
-        {
-            clientId = client.Id;
+        public void Start(int clientId)            
+        {            
+            this.clientToEditId = clientId;
+            var client = clientRepository[clientId];
             view.FillEditFields(client.Name, client.CreationDate.ToString(), client.Payment.ToString());
             view.ShowView();
         }

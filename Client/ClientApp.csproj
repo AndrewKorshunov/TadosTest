@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientRepository.cs" />
     <Compile Include="IClientRepository.cs" />
     <Compile Include="Presenters\AddClientPresenter.cs" />
     <Compile Include="Presenters\EditClientPresenter.cs" />
@@ -55,6 +54,8 @@
     <Compile Include="Interfaces\IAddClientView.cs" />
     <Compile Include="Interfaces\IEditClientView.cs" />
     <Compile Include="Interfaces\IMainClientView.cs" />
+    <Compile Include="ClientRepository.cs" />
+    <Compile Include="RandomStuffComments.cs" />
     <Compile Include="Views\AddClientForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -6,14 +6,13 @@ namespace ClientApp
 {
     class MainPresenter
     {
-        private readonly ClientRepository clientRepository;
+        private readonly IClientRepository clientRepository;
         private readonly IMainClientView view;
 
-        private readonly EditClientPresenter editClientPresenter;
         private readonly AddClientPresenter addClientPresenter;
+        private readonly EditClientPresenter editClientPresenter;        
 
-
-        public MainPresenter(IMainClientView view, ClientRepository clientRepo)
+        public MainPresenter(IMainClientView view, IClientRepository clientRepo)
         {
             // Move it somewhere?
             addClientPresenter = new AddClientPresenter(new AddClientForm(), clientRepo);
@@ -24,6 +23,7 @@ namespace ClientApp
 
             view.BuildViewWithFields("Name", "CreationDate", "Payment");
             HookUpViewEvents();
+            clientRepository.RepositoryChanged += () => DisplayClients(clientRepo);
         }
 
         public void AddClient()
@@ -34,21 +34,18 @@ namespace ClientApp
         public void EditClient()
         {
             if(view.IsClientSelected)
-                editClientPresenter.Start(clientRepository[view.SelectedClientIndex]);
+                editClientPresenter.Start(view.SelectedClientIndex);
         }
         
         public void GetAllClients()
         {
-            DisplayClients(clientRepository.GetAllClients());
+            DisplayClients(clientRepository);
         }       
         
         public void RemoveClient()
         {
-            if (view.IsClientSelected)
-            {
-                clientRepository.RemoveClient(view.SelectedClientIndex);
-                DisplayClients(clientRepository.AllClients());
-            }
+            if (view.IsClientSelected)            
+                clientRepository.RemoveAt(view.SelectedClientIndex);            
         }
 
         public void Start()

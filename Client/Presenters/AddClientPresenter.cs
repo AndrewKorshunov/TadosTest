@@ -1,18 +1,14 @@
-﻿using ClientsLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using ClientsLibrary;
 
 namespace ClientApp
 {
     class AddClientPresenter
     {
-        private readonly ClientRepository clientRepository;
+        private readonly IClientRepository clientRepository;
         private readonly IAddClientView view;
 
-        public AddClientPresenter(IAddClientView view, ClientRepository clientRepo)
+        public AddClientPresenter(IAddClientView view, IClientRepository clientRepo)
         {
             this.clientRepository = clientRepo;
             this.view = view;
@@ -34,8 +30,7 @@ namespace ClientApp
                 view.ShowError(e.Message);
                 return;
             }
-
-            clientRepository.AddClient(newClient);
+            clientRepository.Add(newClient);
             view.CloseView();
         }
 
