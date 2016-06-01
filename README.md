@@ -10,6 +10,8 @@
 Клиент - WinForms, MVP.
 
 ![image](/Pictures/MainForm.png)
+![image](/Pictures/AddForm.png)
+![image](/Pictures/EditForm.png)
 
 #### Задуманная идея
 
