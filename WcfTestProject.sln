@@ -11,8 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientsLibrary", "ClientsLi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pictures", "Pictures", "{CA47EBB2-1405-4352-9ADD-09FA95410314}"
 	ProjectSection(SolutionItems) = preProject
+		Pictures\AddForm.png = Pictures\AddForm.png
 		Pictures\CurrentRequest.png = Pictures\CurrentRequest.png
 		Pictures\CurrentStructure.png = Pictures\CurrentStructure.png
+		Pictures\EditForm.png = Pictures\EditForm.png
 		Pictures\IdealRequest.png = Pictures\IdealRequest.png
 		Pictures\IdealStructure.png = Pictures\IdealStructure.png
 		Pictures\MainForm.png = Pictures\MainForm.png

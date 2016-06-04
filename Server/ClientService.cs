@@ -14,20 +14,18 @@ namespace Server
             var connectionString = ConfigurationManager.ConnectionStrings["ClientsDB"].ConnectionString;
             dataProvider = new DbConnector(connectionString);
         }
-        
+
         public bool AddClient(ClientEntity client)
         {
             int affectedRows = dataProvider.AddClient(client);
-            if (affectedRows == 1) return true;
-            else return false;
+            return affectedRows == 1;
         }
 
         public bool EditClient(int updateId, ClientEntity client)
         {                
             int affectedRows = dataProvider.EditClient(updateId, client);
             // Should affect only 1 client    
-            if (affectedRows == 1) return true;
-            else return false;
+            return affectedRows == 1;
         }
 
         public IEnumerable<ClientEntity> GetAllClients()
@@ -39,8 +37,7 @@ namespace Server
         {
             int affectedRows = dataProvider.RemoveClient(removeId);
             // Should affect only 1 client    
-            if (affectedRows == 1) return true;
-            else return false;
+            return affectedRows == 1;
         }
     }
 }
