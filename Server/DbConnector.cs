@@ -33,7 +33,7 @@ namespace Server
                     sqlCommand.ExecuteNonQuery();
                     return true;
                 }
-                catch  // There shoul be different exceptions handling for SqlConnection.Open and SqlCommand execution
+                catch  // There should be different exception handlers for SqlConnection.Open and SqlCommand execution
                 {
                     return false;
                 }
@@ -59,7 +59,7 @@ namespace Server
                     sqlCommand.ExecuteNonQuery();
                     return true;
                 }
-                catch  // There shoul be different exceptions handling for SqlConnection.Open and SqlCommand execution
+                catch  // There should be different exception handlers for SqlConnection.Open and SqlCommand execution
                 {
                     return false;
                 }
@@ -91,7 +91,7 @@ namespace Server
                     dataReader.Close();
                     return clients;
                 }
-                catch  // There shoul be different exceptions handling for SqlConnection.Open and SqlCommand execution
+                catch  // There should be different exception handlers for SqlConnection.Open and SqlCommand execution
                 {
                     return new List<ClientEntity>();
                 }
@@ -113,7 +113,7 @@ namespace Server
 
                     return true;
                 }
-                catch  // There shoul be different exceptions handling for SqlConnection.Open and SqlCommand execution
+                catch  // There should be different exception handlers for SqlConnection.Open and SqlCommand execution
                 {
                     return false;
                 }
