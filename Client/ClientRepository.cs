@@ -32,9 +32,12 @@ namespace ClientApp
 
         public void Add(ClientEntity client)
         {
-            bool result = clientProxy.AddClient(client);
-            clients.Add(client);
-            InvokeEvent(RepositoryChanged);
+            bool succesful = clientProxy.AddClient(client);
+            if (succesful)
+            {
+                clients.Add(client);
+                InvokeEvent(RepositoryChanged);
+            }
         }
 
         public void Dispose()
@@ -55,19 +58,25 @@ namespace ClientApp
         public void RemoveAt(int id)
         {
             int realId = clients[id].Id;
-            bool callResult = clientProxy.RemoveClient(realId);
-            clients.RemoveAt(id);
-            InvokeEvent(RepositoryChanged);
+            bool succesful = clientProxy.RemoveClient(realId);
+            if (succesful)
+            {
+                clients.RemoveAt(id);
+                InvokeEvent(RepositoryChanged);
+            }
         }
                 
         public void ReplaceAt(int idInRepo, ClientEntity client)
         {
-            // Only repository knows real id of client in DB
+            // Only repository should know real id of client in DB
             int realId = clients[idInRepo].Id;
             client.Id = realId;
-            bool callResult = clientProxy.EditClient(client);
-            clients[idInRepo] = client;
-            InvokeEvent(RepositoryChanged);
+            bool succesful = clientProxy.EditClient(client);
+            if (succesful)
+            {
+                clients[idInRepo] = client;
+                InvokeEvent(RepositoryChanged);
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
