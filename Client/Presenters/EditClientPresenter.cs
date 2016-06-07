@@ -17,8 +17,16 @@ namespace ClientApp
             view.ClientEdited += SaveEditedClient;
         }
 
-        void SaveEditedClient()
-        {            
+        public void Start(int clientId)            
+        {
+            this.clientToEditId = clientId;
+            var client = clientRepository[clientId];
+            view.FillEditFields(client.Name, client.CreationDate.ToString(), client.Payment.ToString());
+            view.ShowView();
+        }
+
+        private void SaveEditedClient()
+        {
             var newClient = new ClientEntity();
             try // Filter type conversion exceptions from text in textBox
             {
@@ -33,14 +41,6 @@ namespace ClientApp
             }
             clientRepository.ReplaceAt(clientToEditId, newClient);
             view.CloseView();
-        }
-
-        public void Start(int clientId)            
-        {
-            this.clientToEditId = clientId;
-            var client = clientRepository[clientId];
-            view.FillEditFields(client.Name, client.CreationDate.ToString(), client.Payment.ToString());
-            view.ShowView();
         }
     }
 }

@@ -16,7 +16,12 @@ namespace ClientApp
             view.ClientCreated += CreateClient;
         }
 
-        void CreateClient()
+        public void Start()
+        {
+            view.ShowView();
+        }
+
+        private void CreateClient()
         {
             var newClient = new ClientEntity();
             try // Filter type conversion exceptions from text in textBox
@@ -32,11 +37,6 @@ namespace ClientApp
             }
             clientRepository.Add(newClient);
             view.CloseView();
-        }
-
-        public void Start()
-        {
-            view.ShowView();
         }
     }
 }
