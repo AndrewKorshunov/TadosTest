@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using ClientsLibrary;
+using System.Globalization;
 
 namespace Server
 {
-    class DbConnector : IDataProvider
+    class DbConnector
     {
         private readonly string connectionString;
 
@@ -14,42 +15,54 @@ namespace Server
             this.connectionString = connectionString;
         }
 
-        public int AddClient(ClientEntity client)
+        public bool AddClient(ClientEntity client)
         {
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Open();
+                try
+                {
+                    connection.Open();
 
-                string insertCommand = string.Format(
-                    "Insert into Clients(Name,CreationDate,Payment) values ('{0}', '{1}', {2})",
-                    client.Name,
-                    client.CreationDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                    client.Payment.ToString().Replace(',', '.')
-                    );
-                var sqlCommand = new SqlCommand(insertCommand, connection);
-                var affectedRows = sqlCommand.ExecuteNonQuery();
-
-                return affectedRows;
+                    string insertCommand = "Insert into Clients(Name,CreationDate,Payment) values (@name, @creationDate, @payment)";
+                    var sqlCommand = new SqlCommand(insertCommand, connection);
+                    sqlCommand.Parameters.AddRange(new[] {
+                        new SqlParameter("name", client.Name),
+                        new SqlParameter("creationDate", client.CreationDate.ToString("s")),
+                        new SqlParameter("payment", client.Payment.ToString(CultureInfo.InvariantCulture))
+                        });
+                    sqlCommand.ExecuteNonQuery();
+                    return true;
+                }
+                catch  // There shoul be different exceptions handling for SqlConnection.Open and SqlCommand execution
+                {
+                    return false;
+                }
             }
         }
 
-        public int EditClient(int updateId, ClientEntity client)
+        public bool EditClient(ClientEntity client)
         {
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Open();
+                try
+                {
+                    connection.Open();
 
-                string updateString = string.Format(
-                    "Update Clients set Name = '{0}', CreationDate = '{1}', Payment = {2} where Id = {3}",
-                    client.Name,
-                    client.CreationDate.ToString(),
-                    client.Payment.ToString().Replace(',', '.'),
-                    updateId
-                    );
-                var sqlCommand = new SqlCommand(updateString, connection);
-                var affectedRows = sqlCommand.ExecuteNonQuery();
-
-                return affectedRows;
+                    string updateString = "Update Clients set Name = @name, CreationDate = @creationDate, Payment = @payment where Id = @id";
+                    var sqlCommand = new SqlCommand(updateString, connection);
+                    sqlCommand.Parameters.AddRange(new[] {
+                        new SqlParameter("id", client.Id),
+                        new SqlParameter("name", client.Name),
+                        new SqlParameter("creationDate", client.CreationDate.ToString("s")),
+                        new SqlParameter("payment", client.Payment.ToString(CultureInfo.InvariantCulture))
+                        });
+                    sqlCommand.ExecuteNonQuery();
+                    return true;
+                }
+                catch  // There shoul be different exceptions handling for SqlConnection.Open and SqlCommand execution
+                {
+                    return false;
+                }
             }
         }
 
@@ -57,37 +70,53 @@ namespace Server
         {
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-
-                var sqlCommand = new SqlCommand("Select * from Clients", connection);
-                var dataReader = sqlCommand.ExecuteReader();
-                var clients = new List<ClientEntity>();
-                while (dataReader.Read())
+                try
                 {
-                    clients.Add(new ClientEntity()
+                    connection.Open();
+
+                    string selectQuerry = "Select * from Clients";
+                    var sqlCommand = new SqlCommand(selectQuerry, connection);
+                    var dataReader = sqlCommand.ExecuteReader();
+                    var clients = new List<ClientEntity>();
+                    while (dataReader.Read())
                     {
-                        Id = dataReader.GetInt32(0),
-                        Name = dataReader.GetString(1),
-                        CreationDate = dataReader.GetDateTime(2),
-                        Payment = dataReader.GetDecimal(3)
-                    });
+                        clients.Add(new ClientEntity()
+                        {
+                            Id = dataReader.GetInt32(0),
+                            Name = dataReader.GetString(1),
+                            CreationDate = dataReader.GetDateTime(2),
+                            Payment = dataReader.GetDecimal(3)
+                        });
+                    }
+                    dataReader.Close();
+                    return clients;
                 }
-                dataReader.Close();
-                return clients;
+                catch  // There shoul be different exceptions handling for SqlConnection.Open and SqlCommand execution
+                {
+                    return new List<ClientEntity>();
+                }
             }
         }
 
-        public int RemoveClient(int id)
+        public bool RemoveClient(int id)
         {
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Open();
+                try
+                {
+                    connection.Open();
 
-                string deleteQuerry = "Delete from Clients where Id=" + id;
-                var sqlCommand = new SqlCommand(deleteQuerry, connection);
-                var affectedRows = sqlCommand.ExecuteNonQuery();
+                    string deleteQuerry = "Delete from Clients where Id=@id";
+                    var sqlCommand = new SqlCommand(deleteQuerry, connection);
+                    sqlCommand.Parameters.AddWithValue("id", id);
+                    sqlCommand.ExecuteNonQuery();
 
-                return affectedRows;
+                    return true;
+                }
+                catch  // There shoul be different exceptions handling for SqlConnection.Open and SqlCommand execution
+                {
+                    return false;
+                }
             }
         }
     }

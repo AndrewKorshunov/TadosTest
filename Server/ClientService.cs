@@ -7,7 +7,7 @@ namespace Server
 {
     public class ClientService : IClientService
     {
-        IDataProvider dataProvider;
+        private readonly DbConnector dataProvider;
 
         public ClientService()
         {
@@ -17,15 +17,12 @@ namespace Server
 
         public bool AddClient(ClientEntity client)
         {
-            int affectedRows = dataProvider.AddClient(client);
-            return affectedRows == 1;
+            return dataProvider.AddClient(client);
         }
 
-        public bool EditClient(int updateId, ClientEntity client)
-        {                
-            int affectedRows = dataProvider.EditClient(updateId, client);
-            // Should affect only 1 client    
-            return affectedRows == 1;
+        public bool EditClient(ClientEntity client)
+        {
+            return dataProvider.EditClient(client);
         }
 
         public IEnumerable<ClientEntity> GetAllClients()
@@ -35,9 +32,7 @@ namespace Server
 
         public bool RemoveClient(int removeId)
         {
-            int affectedRows = dataProvider.RemoveClient(removeId);
-            // Should affect only 1 client    
-            return affectedRows == 1;
+            return dataProvider.RemoveClient(removeId);
         }
     }
 }

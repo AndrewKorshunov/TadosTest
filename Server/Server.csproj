@@ -60,9 +60,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeClientService.cs" />
     <Compile Include="ClientService.cs" />
     <Compile Include="DbConnector.cs" />
-    <Compile Include="IDataProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
