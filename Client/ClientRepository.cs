@@ -32,7 +32,7 @@ namespace ClientApp
 
         public void Add(ClientEntity client)
         {
-            var result = clientProxy.AddClient(client);
+            bool result = clientProxy.AddClient(client);
             clients.Add(client);
             InvokeEvent(RepositoryChanged);
         }
@@ -55,16 +55,18 @@ namespace ClientApp
         public void RemoveAt(int id)
         {
             int realId = clients[id].Id;
-            var callResult = clientProxy.RemoveClient(realId);
+            bool callResult = clientProxy.RemoveClient(realId);
             clients.RemoveAt(id);
             InvokeEvent(RepositoryChanged);
         }
-
-        public void ReplaceAt(int id, ClientEntity client)
+                
+        public void ReplaceAt(int idInRepo, ClientEntity client)
         {
-            int realId = clients[id].Id;
-            var callResult = clientProxy.EditClient(realId, client);
-            clients[id] = client;
+            // Only repository knows real id of client in DB
+            int realId = clients[idInRepo].Id;
+            client.Id = realId;
+            bool callResult = clientProxy.EditClient(client);
+            clients[idInRepo] = client;
             InvokeEvent(RepositoryChanged);
         }
 

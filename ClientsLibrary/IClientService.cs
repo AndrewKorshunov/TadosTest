@@ -11,7 +11,7 @@ namespace ClientsLibrary
         bool AddClient(ClientEntity client);
 
         [OperationContract]
-        bool EditClient(int updateId, ClientEntity client);
+        bool EditClient(ClientEntity client);
 
         [OperationContract]
         IEnumerable<ClientEntity> GetAllClients();

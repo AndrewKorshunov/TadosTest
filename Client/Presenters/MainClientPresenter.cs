@@ -39,6 +39,7 @@ namespace ClientApp
         
         public void GetAllClients()
         {
+            clientRepository.ForceUpdate();
             DisplayClients(clientRepository);
         }       
         
@@ -62,7 +63,7 @@ namespace ClientApp
 
         private void HookUpViewEvents()
         {
-            view.AllClientsRequsted += GetAllClients;
+            view.AllClientsRequested += GetAllClients;
             view.ClientCreating += AddClient;
             view.ClientEditing += EditClient;
             view.ClientRemoving += RemoveClient;

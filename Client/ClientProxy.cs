@@ -12,9 +12,9 @@ namespace ClientApp
             return base.Channel.AddClient(client);
         }
 
-        public bool EditClient(int updateId, ClientEntity client)
+        public bool EditClient(ClientEntity client)
         {
-            return base.Channel.EditClient(updateId, client);
+            return base.Channel.EditClient(client);
         }
 
         public IEnumerable<ClientEntity> GetAllClients()

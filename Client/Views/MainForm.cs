@@ -10,14 +10,14 @@ namespace ClientApp
             InitializeComponent();
 
             buttonCreateClient.Click += (sender,args) => InvokeEvent(ClientCreating);
-            buttonGetClients.Click += (sender, args) => InvokeEvent(AllClientsRequsted);
+            buttonGetClients.Click += (sender, args) => InvokeEvent(AllClientsRequested);
             buttonDeleteClient.Click += (sender, args) => InvokeEvent(ClientRemoving);
             buttonEditClient.Click += (sender, args) => InvokeEvent(ClientEditing);
 
             this.FormClosing += (sender, args) => InvokeEvent(MainViewClosing);
         }
 
-        public event Action AllClientsRequsted;
+        public event Action AllClientsRequested;
         public event Action ClientCreating;
         public event Action ClientEditing;
         public event Action ClientRemoving;

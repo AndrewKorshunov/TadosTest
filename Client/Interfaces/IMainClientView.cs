@@ -4,7 +4,7 @@ namespace ClientApp
 {
     interface IMainClientView
     {
-        event Action AllClientsRequsted;
+        event Action AllClientsRequested;
         event Action ClientCreating;
         event Action ClientEditing;
         event Action ClientRemoving;

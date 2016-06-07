@@ -23,8 +23,8 @@ namespace ClientApp
             try // Filter type conversion exceptions from text in textBox
             {
                 newClient.Name = view.ClientName;
-                newClient.CreationDate = Convert.ToDateTime(view.ClientCreationDate);
-                newClient.Payment = Convert.ToDecimal(view.ClientPayment);
+                newClient.CreationDate = DateTime.Parse(view.ClientCreationDate);
+                newClient.Payment = decimal.Parse(view.ClientPayment, System.Globalization.CultureInfo.InvariantCulture);
             }
             catch (Exception e)
             {
@@ -36,7 +36,7 @@ namespace ClientApp
         }
 
         public void Start(int clientId)            
-        {            
+        {
             this.clientToEditId = clientId;
             var client = clientRepository[clientId];
             view.FillEditFields(client.Name, client.CreationDate.ToString(), client.Payment.ToString());
