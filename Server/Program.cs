@@ -8,7 +8,7 @@ namespace Server
         static void Main()
         {
             // Set absolute path to DB
-            AppDomain.CurrentDomain.SetData("DataDirectory", @"C:\Users\Andrew\Desktop\SChool_mag\_AfterParty\TadosTest\Server\DB\");            
+            AppDomain.CurrentDomain.SetData("DataDirectory", @"C:\Users\Andrew\Desktop\SChool_mag\_AfterParty\WcfTest\Server\DB\");            
 
             var host = new ServiceHost(typeof(ClientService));
             host.Open();
